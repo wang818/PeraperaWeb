@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Perapera - AI驱动的多国语言影子字幕软件，实时翻译视频内容">
+    <title>Perapera - AI多国语言影子字幕软件</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 150px 0 100px;
+            text-align: center;
+            margin-top: 60px;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: white;
+            color: #667eea;
+            padding: 15px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+            animation: fadeInUp 1s ease 0.4s both;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        /* Features Section */
+        .features {
+            padding: 80px 0;
+            background: #f8f9fa;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #333;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #667eea;
+        }
+
+        /* Languages Section */
+        .languages {
+            padding: 80px 0;
+        }
+
+        .language-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .language-tag {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 10px 25px;
+            border-radius: 25px;
+            font-weight: 500;
+        }
+
+        /* How It Works */
+        .how-it-works {
+            padding: 80px 0;
+            background: #f8f9fa;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .step {
+            text-align: center;
+        }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 0 auto 1rem;
+        }
+
+        .step h3 {
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        /* Footer */
+        footer {
+            background: #2d3748;
+            color: white;
+            padding: 40px 0 20px;
+            text-align: center;
+        }
+
+        .footer-content {
+            margin-bottom: 2rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+
+        .social-links a {
+            color: white;
+            font-size: 1.5rem;
+            transition: opacity 0.3s;
+        }
+
+        .social-links a:hover {
+            opacity: 0.7;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="container">
+            <div class="logo">
+                <span>🎬</span>
+                <span>Perapera</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#features">功能特点</a></li>
+                <li><a href="#languages">支持语言</a></li>
+                <li><a href="#how-it-works">使用方法</a></li>
+                <li><a href="#download">下载</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Perapera - AI多国语言影子字幕</h1>
+            <p>突破语言障碍，让全世界的视频内容触手可及</p>
+            <a href="#download" class="cta-button">立即下载</a>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <h2 class="section-title">核心功能</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🤖</div>
+                    <h3>AI智能翻译</h3>
+                    <p>采用先进的人工智能技术，提供准确、流畅的实时翻译，理解上下文语境，确保翻译质量。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🌍</div>
+                    <h3>多国语言支持</h3>
+                    <p>支持100+种语言互译，覆盖全球主要语言，无论您想学习哪种语言，都能找到合适的内容。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>实时影子字幕</h3>
+                    <p>无需等待，即时生成翻译字幕，与视频完美同步，不影响您的观看体验。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>精准同步</h3>
+                    <p>智能时间轴对齐技术，确保字幕与音频完美匹配，不会出现延迟或错位。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎨</div>
+                    <h3>自定义样式</h3>
+                    <p>支持字幕样式自定义，包括字体、大小、颜色、位置等，打造个性化观看体验。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💾</div>
+                    <h3>离线使用</h3>
+                    <p>下载语言包后可离线使用，无需网络连接也能享受翻译服务，随时随地学习。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Languages Section -->
+    <section id="languages" class="languages">
+        <div class="container">
+            <h2 class="section-title">支持的语言</h2>
+            <p style="text-align: center; font-size: 1.1rem; margin-bottom: 2rem;">
+                覆盖全球主要语言，让您无障碍观看世界各地的精彩内容
+            </p>
+            <div class="language-tags">
+                <span class="language-tag">中文</span>
+                <span class="language-tag">English</span>
+                <span class="language-tag">日本語</span>
+                <span class="language-tag">한국어</span>
+                <span class="language-tag">Español</span>
+                <span class="language-tag">Français</span>
+                <span class="language-tag">Deutsch</span>
+                <span class="language-tag">Русский</span>
+                <span class="language-tag">Português</span>
+                <span class="language-tag">Italiano</span>
+                <span class="language-tag">العربية</span>
+                <span class="language-tag">ไทย</span>
+                <span class="language-tag">Tiếng Việt</span>
+                <span class="language-tag">Nederlands</span>
+                <span class="language-tag">Polski</span>
+                <span class="language-tag">Türkçe</span>
+                <span class="language-tag">हिन्दी</span>
+                <span class="language-tag">更多...</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section id="how-it-works" class="how-it-works">
+        <div class="container">
+            <h2 class="section-title">使用方法</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>下载安装</h3>
+                    <p>下载并安装 Perapera 到您的设备</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>选择语言</h3>
+                    <p>设置源语言和目标翻译语言</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>播放视频</h3>
+                    <p>打开任意视频，Perapera 自动识别</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h3>享受翻译</h3>
+                    <p>实时翻译字幕自动显示，畅享内容</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Download Section -->
+    <section id="download" class="features">
+        <div class="container" style="text-align: center;">
+            <h2 class="section-title">立即开始使用</h2>
+            <p style="font-size: 1.2rem; margin-bottom: 2rem;">
+                免费下载 Perapera，开启您的多语言视频之旅
+            </p>
+            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                <a href="#" class="cta-button" style="background: #667eea; color: white;">
+                    Windows 版本
+                </a>
+                <a href="#" class="cta-button" style="background: #667eea; color: white;">
+                    macOS 版本
+                </a>
+                <a href="#" class="cta-button" style="background: #667eea; color: white;">
+                    Linux 版本
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <h3>Perapera</h3>
+                <p>让语言不再是障碍</p>
+                <div class="social-links">
+                    <a href="#" title="GitHub">📱</a>
+                    <a href="#" title="Twitter">🐦</a>
+                    <a href="#" title="Email">✉️</a>
+                </div>
+            </div>
+            <p>&copy; 2026 Perapera. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
