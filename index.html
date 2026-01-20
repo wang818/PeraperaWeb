@@ -245,6 +245,146 @@
             }
         }
 
+        /* Login Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 40px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            animation: slideDown 0.3s ease;
+        }
+
+        .modal-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .modal-header h2 {
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 20px;
+        }
+
+        .close:hover {
+            color: #000;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .login-button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .login-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        /* User Info */
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+
+        .logout-btn {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .login-btn {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 20px;
+            border-radius: 20px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         @media (max-width: 768px) {
             .hero h1 {
                 font-size: 2rem;
@@ -256,10 +396,16 @@
 
             .nav-links {
                 gap: 1rem;
+                flex-wrap: wrap;
             }
 
             .section-title {
                 font-size: 2rem;
+            }
+
+            .modal-content {
+                margin: 20% auto;
+                padding: 30px 20px;
             }
         }
     </style>
@@ -277,6 +423,12 @@
                 <li><a href="#languages">支持语言</a></li>
                 <li><a href="#how-it-works">使用方法</a></li>
                 <li><a href="#download">下载</a></li>
+                <li><a href="#" id="loginBtn" class="login-btn">登录</a></li>
+                <li id="userInfo" class="user-info" style="display: none;">
+                    <img id="userAvatar" class="user-avatar" src="" alt="用户头像">
+                    <span id="userEmail"></span>
+                    <a href="#" id="logoutBtn" class="logout-btn">退出</a>
+                </li>
             </ul>
         </nav>
     </header>
@@ -409,6 +561,29 @@
         </div>
     </section>
 
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div class="modal-header">
+                <h2>登录 Perapera</h2>
+                <p>欢迎回来！</p>
+            </div>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="email">邮箱地址</label>
+                    <input type="email" id="email" name="email" placeholder="请输入您的邮箱" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">密码</label>
+                    <input type="password" id="password" name="password" placeholder="请输入密码" required>
+                    <div class="error-message" id="errorMessage">邮箱或密码错误，请重试</div>
+                </div>
+                <button type="submit" class="login-button">登录</button>
+            </form>
+        </div>
+    </div>
+
     <!-- Footer -->
     <footer>
         <div class="container">
@@ -424,5 +599,85 @@
             <p>&copy; 2026 Perapera. All rights reserved.</p>
         </div>
     </footer>
+
+    <script>
+        // 获取元素
+        const loginBtn = document.getElementById('loginBtn');
+        const loginModal = document.getElementById('loginModal');
+        const closeBtn = document.querySelector('.close');
+        const loginForm = document.getElementById('loginForm');
+        const errorMessage = document.getElementById('errorMessage');
+        const userInfo = document.getElementById('userInfo');
+        const userEmail = document.getElementById('userEmail');
+        const userAvatar = document.getElementById('userAvatar');
+        const logoutBtn = document.getElementById('logoutBtn');
+
+        // 检查是否已登录
+        window.addEventListener('load', function() {
+            const savedEmail = localStorage.getItem('userEmail');
+            if (savedEmail) {
+                showUserInfo(savedEmail);
+            }
+        });
+
+        // 打开登录弹窗
+        loginBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            loginModal.style.display = 'block';
+            errorMessage.style.display = 'none';
+        });
+
+        // 关闭登录弹窗
+        closeBtn.addEventListener('click', function() {
+            loginModal.style.display = 'none';
+        });
+
+        // 点击弹窗外部关闭
+        window.addEventListener('click', function(e) {
+            if (e.target === loginModal) {
+                loginModal.style.display = 'none';
+            }
+        });
+
+        // 处理登录表单提交
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            // 验证密码
+            if (password === 'perapera') {
+                // 登录成功
+                localStorage.setItem('userEmail', email);
+                showUserInfo(email);
+                loginModal.style.display = 'none';
+                loginForm.reset();
+                errorMessage.style.display = 'none';
+            } else {
+                // 登录失败
+                errorMessage.style.display = 'block';
+            }
+        });
+
+        // 显示用户信息
+        function showUserInfo(email) {
+            loginBtn.style.display = 'none';
+            userInfo.style.display = 'flex';
+            userEmail.textContent = email;
+            
+            // 生成头像（使用 UI Avatars API）
+            const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(email)}&background=667eea&color=fff&size=128`;
+            userAvatar.src = avatarUrl;
+        }
+
+        // 退出登录
+        logoutBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            localStorage.removeItem('userEmail');
+            userInfo.style.display = 'none';
+            loginBtn.style.display = 'block';
+        });
+    </script>
 </body>
 </html>
